@@ -1,16 +1,17 @@
 import { DataLoader } from "./src/index";
-import { sleep, createMapping } from "./src/util";
+import { sleep, createMapping, sleep2 } from "./src/util";
 
 const loader = new DataLoader(async (ids: number[]) => {
-  console.log("new DataLoader", ids);
+  console.log("batchFn", ids);
   const lists = await fetcher();
   const mapping = createMapping(lists);
   return ids.map((id) => mapping[id]);
 });
 
 async function fetcher() {
+  // await sleep2(3000);
   // await sleep(3000);
-  console.log("fetcher");
+  console.log("In fetcher");
   const data = [
     { id: 1, name: "fetcher1" },
     { id: 2, name: "fetcher2" },
@@ -21,9 +22,17 @@ async function fetcher() {
   return data;
 }
 
-loader.load(1).then((res) => {
-  console.log("res", res);
+loader.load(1);
+console.log(JSON.stringify(loader));
+loader.load(2).then((res) => {
+  console.log("load(2)", res);
 });
-loader.load(2);
+loader.load(2).then((res) => {
+  console.log("load(2)", res);
+});
 loader.load(3);
 loader.load(4);
+loader.load(5);
+loader.load(6).then((res) => {
+  console.log("load(6)", res);
+});
