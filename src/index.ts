@@ -20,13 +20,14 @@ class DataLoader<K, V> {
     this._batch = null;
     this._batchLoadFn = batchLoadFn;
     this._batchScheduleFn = function (fn) {
-      if (!resolvedPromise) {
-        resolvedPromise = Promise.resolve();
-      }
-      // 异步执行的，进入微任务队列，通过事件循环，来加入调用栈
-      resolvedPromise.then(() => {
-        process.nextTick(fn);
-      });
+      process.nextTick(fn);
+      // if (!resolvedPromise) {
+      //   resolvedPromise = Promise.resolve();
+      // }
+      // // 异步执行的，进入微任务队列，通过事件循环，来加入调用栈
+      // resolvedPromise.then(() => {
+      //   process.nextTick(fn);
+      // });
       // process.nextTick(fn); // 同步执行的，直接进入调用栈
     };
   }
